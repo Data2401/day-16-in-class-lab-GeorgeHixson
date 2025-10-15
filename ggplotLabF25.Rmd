@@ -65,7 +65,7 @@ heights %>%
 heights %>% 
   ggplot(aes(x = height, group = sex)) + 
   geom_histogram() + 
-  geom_density() +
+  geom_density() + facet_grid(~ sex) 
   theme_bw()
 ```
 
@@ -83,14 +83,22 @@ heights %>%
 If you've used fill, then there is now a slight issue that they are overlapped. We can fix this with alpha transparency!
 
 ```{r}
-
+heights %>% 
+  ggplot(aes(x = height, group = sex, fill = sex)) + 
+  geom_histogram(binwidth = 1, alpha = 0.5) + 
+  geom_density() +
+  theme_bw()
 
 ```
 
 Let's make some boxplots of the same information.
 
 ```{r}
-
+heights %>% 
+  ggplot(aes(x = height, y = sex)) + 
+  geom_boxplot() + 
+  geom_density() +
+  theme_bw()
 ```
 
 ## Quantatitive summaries:  
@@ -98,12 +106,19 @@ Let's make some boxplots of the same information.
 Find the mean and median overall. 
 
 ```{r}
-
+heights %>% 
+  ggplot(aes(x = height, y = sex)) + 
+  geom_boxplot() + 
+  geom_density() +
+  theme_bw()
 ```
 
 Find the mean and median for both groups. 
 
 ```{r}
+heights %>% group_by(sex) %>%  summarize(mean_height = mean(height, na.rm = T), median_height = median(height, na.rm = T))
+
+heights %>% summarize(mean_height = mean(height, na.rm = T), median_height = median(height, na.rm = T), .by = sex)
 
 
 ```
@@ -111,7 +126,7 @@ Find the mean and median for both groups.
 How tall is the tallest woman? How short is the shortest man? 
 
 ```{R}
-
+heights %>% group_by(sex) %>%  summarize(max_height = max(height, na.rm = T), min_height = min(height, na.rm = T))
 
 ```
 
